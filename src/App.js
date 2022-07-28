@@ -10,34 +10,26 @@ function App() {
             .then(response => response.text())
             .then(data => {
                 const files = data.split(/\r?\n/)
-
                 return Promise.all(files.map(file => {
                     return fetch(file)
                         .then(response => {
                             if (response.ok === false) {
                                 return {file: 'файл не найден'}
                             } else {
-
                                 const name = new URL(file)
                                 return response.blob()
                                     .then(file => {
                                         return {fileName: name.pathname.slice(1), fileSize: response.headers.get('content-length'), file}
                                     })
-
                             }
-
-
                         }).catch(error => console.log(error))
                 }))
-
             })
             .then(data => {
                 console.log(data)
                 setFiles(data)
             })
             .catch(console.log)
-
-
     }
 
     return (
